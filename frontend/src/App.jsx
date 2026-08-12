@@ -2,19 +2,23 @@ import { useState, useEffect } from 'react'
 import { weatherApi } from './services/api'
 import Sidebar from './components/Sidebar'
 import Dashboard from './components/Dashboard'
+import LandingPage from './components/LandingPage'
 
 function App() {
+  const [hasEntered, setHasEntered] = useState(false)
+
   const [formData, setFormData] = useState({
-    latitude: 51.5,
-    longitude: -0.1,
-    start_date: '2024-01-01',
-    end_date: '2024-01-10',
+    latitude: '',
+    longitude: '',
+    start_date: '',
+    end_date: '',
   })
 
   const [loading, setLoading] = useState(false)
   const [savedFiles, setSavedFiles] = useState([])
   const [currentData, setCurrentData] = useState(null)
-  const [isBrowsing, setIsBrowsing] = useState(true)
+  const [isBrowsing, setIsBrowsing] = useState(false)
+  const [activeFile, setActiveFile] = useState(null)
 
   useEffect(() => {
     loadFiles()
@@ -48,10 +52,16 @@ function App() {
     try {
       const data = await weatherApi.getWeatherFileContent(fileName)
       setCurrentData(data)
+      setActiveFile(fileName)
       setIsBrowsing(false)
     } catch (error) {
       alert('Failed to load file content from S3')
     }
+  }
+
+  const handleClearData = () => {
+    setCurrentData(null)
+    setActiveFile(null)
   }
 
   const handleBrowseClick = () => {
@@ -62,8 +72,12 @@ function App() {
     setIsBrowsing(false)
   }
 
+  if (!hasEntered) {
+    return <LandingPage onEnter={() => setHasEntered(true)} />
+  }
+
   return (
-    <div className="flex flex-col md:flex-row h-screen bg-[#f8fafc] text-slate-800 font-sans">
+    <div className="flex flex-col md:flex-row min-h-screen bg-[#f8fafc] text-slate-800 font-sans">
       <Sidebar
         formData={formData}
         setFormData={setFormData}
@@ -71,7 +85,7 @@ function App() {
         loading={loading}
         savedFiles={savedFiles}
         handleFileClick={handleFileClick}
-        activeFileName={currentData?.file_name || currentData?.name || null}
+        activeFileName={activeFile}
         handleBrowseClick={handleBrowseClick}
       />
       <Dashboard
@@ -80,6 +94,7 @@ function App() {
         savedFiles={savedFiles}
         handleFileClick={handleFileClick}
         handleCloseBrowser={handleCloseBrowser}
+        handleClearData={handleClearData}
       />
     </div>
   )

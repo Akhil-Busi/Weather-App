@@ -26,14 +26,14 @@ export default function Sidebar({ formData, setFormData, handleFetchData, loadin
   }
 
   return (
-    <div className="w-full md:w-80 bg-[#f8fafc] md:border-r border-slate-200 flex flex-col p-4 md:p-6 gap-6 h-screen overflow-y-auto font-sans">
+    <div className="w-full md:w-80 bg-[#f8fafc] md:border-r border-slate-200 flex flex-col p-4 md:p-6 gap-6 md:h-screen md:sticky md:top-0 overflow-y-auto font-sans shadow-sm md:shadow-none z-10">
       <div className="flex items-start gap-3">
         <div className="p-2 bg-[#e6f3f5] text-[#008394] rounded-full">
           <Cloud size={24} />
         </div>
         <div>
-          <h1 className="text-base font-bold text-slate-800 leading-tight">Weather Archive Explorer</h1>
-          <p className="text-xs text-slate-500 mt-1">Fetch once, store as a file, visualize offline</p>
+          <h1 className="text-base font-bold text-slate-800 leading-tight">Historic Weather</h1>
+          <p className="text-xs text-slate-500 mt-1">Fine tune your query, Fetch once, Store as a file AND Visualize</p>
         </div>
       </div>
 

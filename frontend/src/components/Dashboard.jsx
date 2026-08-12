@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import { CloudRain, FolderOpen, FileJson, MapPin, Calendar, X } from 'lucide-react'
+import { CloudRain, FolderOpen, FileJson, MapPin, Calendar, X, LineChart } from 'lucide-react'
 import { 
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer 
 } from 'recharts'
 
-export default function Dashboard({ currentData, isBrowsing, savedFiles, handleFileClick, handleCloseBrowser }) {
+export default function Dashboard({ currentData, isBrowsing, savedFiles, handleFileClick, handleCloseBrowser, handleClearData }) {
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [currentPage, setCurrentPage] = useState(1)
 
@@ -118,6 +118,8 @@ export default function Dashboard({ currentData, isBrowsing, savedFiles, handleF
     date: date,
     maxTemp: daily.temperature_2m_max?.[index] ?? 0,
     minTemp: daily.temperature_2m_min?.[index] ?? 0,
+    appMaxTemp: daily.apparent_temperature_max?.[index] ?? 'N/A',
+    appMinTemp: daily.apparent_temperature_min?.[index] ?? 'N/A',
     precip: daily.precipitation_sum?.[index] ?? 0,
     wind: daily.windspeed_10m_max?.[index] ?? 'N/A',
   }))
@@ -143,6 +145,21 @@ export default function Dashboard({ currentData, isBrowsing, savedFiles, handleF
   return (
     <div className="flex-1 p-4 md:p-8 overflow-y-auto bg-[#f8fafc] text-slate-800 font-sans">
       <div className="max-w-6xl mx-auto space-y-6">
+        <div className="flex justify-between items-center bg-white border border-slate-200 p-4 rounded-xl shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-[#e6f3f5] text-[#008394] rounded-lg">
+              <LineChart size={20} />
+            </div>
+            <h2 className="text-lg font-bold text-slate-800">Visualizing Dataset</h2>
+          </div>
+          <button 
+            onClick={handleClearData}
+            className="px-3 py-1.5 text-sm font-medium text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors flex items-center gap-2 border border-transparent hover:border-slate-200"
+          >
+            <X size={16} /> Close
+          </button>
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="bg-white border border-slate-200 p-4 rounded-xl shadow-sm">
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Coordinates</p>
@@ -197,12 +214,14 @@ export default function Dashboard({ currentData, isBrowsing, savedFiles, handleF
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-sm text-slate-600">
+            <table className="w-full text-sm text-slate-600 min-w-[700px]">
               <thead className="bg-slate-50 text-slate-500 border-b border-slate-100">
                 <tr>
                   <th className="px-5 py-3 text-left font-medium">Date</th>
                   <th className="px-5 py-3 text-right font-medium">Max °C</th>
                   <th className="px-5 py-3 text-right font-medium">Min °C</th>
+                  <th className="px-5 py-3 text-right font-medium whitespace-nowrap">Feels Like Max °C</th>
+                  <th className="px-5 py-3 text-right font-medium whitespace-nowrap">Feels Like Min °C</th>
                   <th className="px-5 py-3 text-right font-medium">Precip. mm</th>
                   <th className="px-5 py-3 text-right font-medium">Wind km/h</th>
                 </tr>
@@ -210,9 +229,11 @@ export default function Dashboard({ currentData, isBrowsing, savedFiles, handleF
               <tbody className="divide-y divide-slate-100">
                 {currentRows.map((row, idx) => (
                   <tr key={idx} className="hover:bg-slate-50 transition-colors">
-                    <td className="px-5 py-3 whitespace-nowrap text-left">{row.date}</td>
-                    <td className="px-5 py-3 text-right">{row.maxTemp}</td>
-                    <td className="px-5 py-3 text-right">{row.minTemp}</td>
+                    <td className="px-5 py-3 whitespace-nowrap">{row.date}</td>
+                    <td className="px-5 py-3 text-right font-medium text-orange-500">{row.maxTemp}</td>
+                    <td className="px-5 py-3 text-right font-medium text-sky-500">{row.minTemp}</td>
+                    <td className="px-5 py-3 text-right text-slate-400">{row.appMaxTemp}</td>
+                    <td className="px-5 py-3 text-right text-slate-400">{row.appMinTemp}</td>
                     <td className="px-5 py-3 text-right">{row.precip}</td>
                     <td className="px-5 py-3 text-right">{row.wind}</td>
                   </tr>
