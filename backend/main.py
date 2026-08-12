@@ -101,6 +101,12 @@ async def list_weather_files():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to list files: {str(e)}")
 # 6. Endpoint 3: Fetch File Content[cite: 1]
+
+@app.get("/")
+def read_root():
+    return {"status": "API is live and running!"}
+
+
 @app.get("/weather-file-content/{file}")
 def get_weather_file(file: str):
     try:
