@@ -2,7 +2,7 @@ import os
 import json
 import httpx
 from datetime import datetime, date, timezone
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field, model_validator
@@ -54,7 +54,7 @@ async def store_weather_data(request: WeatherRequest):
         "longitude": request.longitude,
         "start_date": request.start_date.isoformat(),
         "end_date": request.end_date.isoformat(),
-        "daily": "temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min", # The 4 required variables[cite: 1]
+        "daily": "temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,precipitation_sum,sunrise,sunset,windspeed_10m_max", # The 5 required variables[cite: 1]
         "timezone": "auto"
     }
     
@@ -84,21 +84,22 @@ async def store_weather_data(request: WeatherRequest):
 
 # 5. Endpoint 2: List Stored Files Efficiently[cite: 1]
 @app.get("/list-weather-files")
-def list_weather_files():
-    # Use list_objects_v2 to avoid brute scanning[cite: 1]
-    response = s3_client.list_objects_v2(Bucket=BUCKET_NAME)
-    
-    files = []
-    if "Contents" in response:
-        for obj in response["Contents"]:
-            files.append({
-                "name": obj["Key"],
-                "size": obj["Size"],
-                "created_at": obj["LastModified"].isoformat()
-            })
-            
-    return {"files": files}
-
+async def list_weather_files():
+    try:
+        response = s3_client.list_objects_v2(Bucket=BUCKET_NAME)
+        files = []
+        
+        if 'Contents' in response:
+            for obj in response['Contents']:
+                files.append({
+                    "name": obj['Key'],
+                    "size": obj['Size'],
+                    "created_at": obj['LastModified'].isoformat() # Formats to ISO8601
+                })
+                
+        return {"files": files}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to list files: {str(e)}")
 # 6. Endpoint 3: Fetch File Content[cite: 1]
 @app.get("/weather-file-content/{file}")
 def get_weather_file(file: str):
