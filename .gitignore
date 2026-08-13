@@ -33,6 +33,7 @@ Thumbs.db
 build/
 dist/
 *.egg-info/
+function.zip
 
 # Node / frontend
 frontend/node_modules/
