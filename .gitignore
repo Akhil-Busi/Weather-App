@@ -35,6 +35,23 @@ dist/
 *.egg-info/
 function.zip
 
+# AWS Lambda
+backend/lambda_Upload/
+backend/.lambda/
+*.zip
+
+# Python dependencies
+backend/site-packages/
+backend/lib/
+boto3/
+botocore/
+s3transfer/
+jmespath/
+urllib3/
+certifi/
+idna/
+dateutil/
+
 # Node / frontend
 frontend/node_modules/
 frontend/dist/

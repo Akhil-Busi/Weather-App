@@ -44,11 +44,11 @@ export default function Sidebar({ formData, setFormData, handleFetchData, loadin
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-xs font-medium text-slate-600 mb-1.5">Latitude</label>
-              <input required type="number" step="any" name="latitude" value={formData.latitude} onChange={handleChange} className="w-full border border-slate-200 rounded-lg p-2 text-sm text-slate-700 focus:border-[#008394] focus:ring-1 focus:ring-[#008394] outline-none transition-all" />
+              <input required type="number" min="-90" max="90" step="any" name="latitude" value={formData.latitude} onChange={handleChange} placeholder="-90 to 90" className="w-full border border-slate-200 rounded-lg p-2 text-sm text-slate-700 focus:border-[#008394] focus:ring-1 focus:ring-[#008394] outline-none transition-all" />
             </div>
             <div>
               <label className="block text-xs font-medium text-slate-600 mb-1.5">Longitude</label>
-              <input required type="number" step="any" name="longitude" value={formData.longitude} onChange={handleChange} className="w-full border border-slate-200 rounded-lg p-2 text-sm text-slate-700 focus:border-[#008394] focus:ring-1 focus:ring-[#008394] outline-none transition-all" />
+              <input required type="number" min="-180" max="180" step="any" name="longitude" value={formData.longitude} onChange={handleChange} placeholder="-180 to 180" className="w-full border border-slate-200 rounded-lg p-2 text-sm text-slate-700 focus:border-[#008394] focus:ring-1 focus:ring-[#008394] outline-none transition-all" />
             </div>
           </div>
 

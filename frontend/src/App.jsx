@@ -6,6 +6,7 @@ import LandingPage from './components/LandingPage'
 
 function App() {
   const [hasEntered, setHasEntered] = useState(false)
+  const [error, setError] = useState(null)
 
   const [formData, setFormData] = useState({
     latitude: '',
@@ -36,13 +37,27 @@ function App() {
 
   const handleFetchData = async (e) => {
     e.preventDefault()
+    setError(null)
     setLoading(true)
     try {
       const response = await weatherApi.storeWeatherData(formData)
       await loadFiles()
       await handleFileClick(response.file)
     } catch (error) {
-      alert('Error: ' + (error.response?.data?.detail?.[0]?.msg || 'Failed to fetch data'))
+      // Handle FastAPI validation errors
+      if (error.response?.data?.detail) {
+        const details = error.response.data.detail
+        if (Array.isArray(details)) {
+          const formattedMsg = details.map(err => err.msg).join(', ')
+          setError(formattedMsg)
+        } else if (typeof details === 'string') {
+          setError(details)
+        } else {
+          setError('Failed to fetch data')
+        }
+      } else {
+        setError(error.message || 'Failed to fetch data')
+      }
     } finally {
       setLoading(false)
     }
@@ -50,12 +65,13 @@ function App() {
 
   const handleFileClick = async (fileName) => {
     try {
+      setError(null)
       const data = await weatherApi.getWeatherFileContent(fileName)
       setCurrentData(data)
       setActiveFile(fileName)
       setIsBrowsing(false)
     } catch (error) {
-      alert('Failed to load file content from S3')
+      setError('Failed to load file content from S3')
     }
   }
 
@@ -78,6 +94,20 @@ function App() {
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-[#f8fafc] text-slate-800 font-sans">
+      {error && (
+        <div className="fixed top-5 right-5 z-50 max-w-sm bg-zinc-900 border border-red-500/60 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center justify-between gap-3 animate-fade-in">
+          <div className="text-sm">
+            <span className="font-semibold text-red-400 block mb-0.5">Error</span>
+            <span className="text-zinc-300">{error}</span>
+          </div>
+          <button 
+            onClick={() => setError(null)} 
+            className="text-zinc-400 hover:text-white p-1 flex-shrink-0"
+          >
+            ✕
+          </button>
+        </div>
+      )}
       <Sidebar
         formData={formData}
         setFormData={setFormData}
