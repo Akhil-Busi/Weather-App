@@ -1,7 +1,4 @@
-Here is the finalized code for your `README.md` file, incorporating all your architecture details, the complete library stack, and the engineering challenges you solved. You can copy this directly into your repository.
-
-```markdown
-# ⛅ Historic Weather App & Data Pipeline
+ Historic Weather App & Data Pipeline
 
 A full-stack, serverless web application designed to query, visualize, and archive historical weather data. Built with a React frontend and a FastAPI backend hosted on AWS Lambda, the application fetches daily temperature metrics, archives query payloads as JSON objects in Amazon S3, and renders interactive performance charts.
 
@@ -9,11 +6,11 @@ A full-stack, serverless web application designed to query, visualize, and archi
 
 ---
 
-## 🏗️ Architecture & Data Flow
+ Architecture & Data Flow
 
 This application is built around a fully decoupled **Serverless Architecture**, ensuring high availability, zero idle infrastructure costs, and automatic scaling.
 
-```text
+
 [ Frontend: React + Vite (Vercel) ]
                  │
                  ▼  (HTTPS / REST API)
@@ -25,7 +22,7 @@ This application is built around a fully decoupled **Serverless Architecture**, 
                  ▼
 [ Amazon S3 Bucket: Historical JSON Storage ]
 
-```
+
 
 ### Component Breakdown
 
@@ -59,7 +56,7 @@ This application is built around a fully decoupled **Serverless Architecture**, 
 
 ---
 
-## ⚡ Real-World Challenges & Engineering Solutions
+### Real-World Challenges & Engineering Solutions
 
 ### 1. Windows-to-Linux Cross-Platform Binary Packaging
 
@@ -73,7 +70,7 @@ This application is built around a fully decoupled **Serverless Architecture**, 
 
 ---
 
-## 🚀 Local Development Setup
+##  Local Development Setup
 
 ### **Prerequisites**
 
@@ -128,7 +125,7 @@ npm run dev
 
 ---
 
-## 📦 Deployment Guide
+##  Deployment Guide
 
 ### **Deploying Backend to AWS Lambda**
 
