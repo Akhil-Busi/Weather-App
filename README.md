@@ -1,4 +1,5 @@
- Historic Weather App & Data Pipeline
+
+#  Historic Weather App & Data Pipeline
 
 A full-stack, serverless web application designed to query, visualize, and archive historical weather data. Built with a React frontend and a FastAPI backend hosted on AWS Lambda, the application fetches daily temperature metrics, archives query payloads as JSON objects in Amazon S3, and renders interactive performance charts.
 
@@ -6,11 +7,11 @@ A full-stack, serverless web application designed to query, visualize, and archi
 
 ---
 
- Architecture & Data Flow
+##  Architecture & Data Flow
 
 This application is built around a fully decoupled **Serverless Architecture**, ensuring high availability, zero idle infrastructure costs, and automatic scaling.
 
-
+```text
 [ Frontend: React + Vite (Vercel) ]
                  │
                  ▼  (HTTPS / REST API)
@@ -22,7 +23,7 @@ This application is built around a fully decoupled **Serverless Architecture**, 
                  ▼
 [ Amazon S3 Bucket: Historical JSON Storage ]
 
-
+```
 
 ### Component Breakdown
 
@@ -33,7 +34,7 @@ This application is built around a fully decoupled **Serverless Architecture**, 
 
 ---
 
-## 🛠️ Tech Stack & Libraries Used
+##  Tech Stack & Libraries Used
 
 ### **Frontend Libraries (React + Vite)**
 
@@ -56,7 +57,7 @@ This application is built around a fully decoupled **Serverless Architecture**, 
 
 ---
 
-### Real-World Challenges & Engineering Solutions
+##  Real-World Challenges & Engineering Solutions
 
 ### 1. Windows-to-Linux Cross-Platform Binary Packaging
 
@@ -160,10 +161,7 @@ Ensure the Lambda Execution Role includes permissions for `s3:PutObject`, `s3:Ge
 1. Connect repository to Vercel.
 2. Define Environment Variable:
 * `VITE_API_BASE_URL` = `<Your-API-Gateway-or-Lambda-URL>`
+
+
 3. Trigger deployment.
-
-```
-
-```
-
 
